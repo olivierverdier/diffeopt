@@ -3,7 +3,14 @@ import numpy as np
 
 from ddmatch.core import generate_optimized_image_composition, generate_optimized_image_gradient, generate_optimized_diffeo_composition
 
-def get_composition_action(shape):
+def get_composition_action(shape, compute_id=False):
+    """
+    compute_id: right composition with the identity
+    is the identity map, but it takes time to compute.
+    Assuming that the gradient is only required in that case,
+    we use the `requires_grad` property to check whether
+    the group element is the identity.
+    """
     I0 = np.zeros(shape)
     image_compose = generate_optimized_image_composition(I0)
     image_gradient = generate_optimized_image_gradient(I0)
@@ -17,10 +24,10 @@ def get_composition_action(shape):
         """
         @staticmethod
         def forward(ctx, q, g):
-            """
-            TODO: when g is the identity, do not compute the composition?
-            """
             ctx.save_for_backward(q,)
+            if g.requires_grad and not compute_id:
+                # gradient can only be obtained if g is the identity
+                return q
             y = np.zeros(q.shape)
             g_ = g.detach().numpy()
             q_ = q.detach().numpy()

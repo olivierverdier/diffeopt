@@ -8,7 +8,7 @@ from ddmatch.core import (
 
 # TODO: implement forward or backward in numba??
 
-def get_density_action(shape):
+def get_density_action(shape, compute_id=False):
     image = np.zeros(shape)
     compute_jacobian = generate_optimized_jacobian_forward(image)
     compute_grad = generate_optimized_image_gradient(image)
@@ -20,8 +20,10 @@ def get_density_action(shape):
 
         @staticmethod
         def forward(ctx, x, g):
-            # TODO: avoid computing when g is the identity
             ctx.save_for_backward(x)
+            if g.requires_grad and not compute_id:
+                return x
+
             g_ = g.detach().numpy()
             gx_x, gx_y, gy_x, gy_y = [np.zeros(shape) for i in range(4)]
             compute_grad(g_[0], gx_x, gx_y)

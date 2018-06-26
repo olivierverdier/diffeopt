@@ -9,7 +9,7 @@ import pytest
 
 def test_function():
     small_shape = [16]*2
-    comp_16 = get_composition_action(small_shape)
+    comp_16 = get_composition_action(small_shape, compute_id=True)
 
     idall = get_identity(small_shape, requires_grad=True)
     I16 = torch.randn(*small_shape, dtype=torch.float64)
@@ -20,7 +20,7 @@ def test_function():
 
 def test_density():
     small_shape = [16]*2
-    vol_16 = get_density_action(small_shape)
+    vol_16 = get_density_action(small_shape, compute_id=True)
     idall = get_identity(small_shape, requires_grad=True)
     x = torch.randn(*small_shape, dtype=torch.float64)
     torch.autograd.gradcheck(
@@ -34,7 +34,7 @@ def test_identity():
     small_shape = [16]*2
     vol_16 = get_density_action(small_shape)
     idall = get_identity(small_shape)
-    idall_ = torch.tensor(idall, requires_grad=True)
+    idall_ = torch.tensor(idall, requires_grad=False)
     idall__ = idall_.double()
     x = torch.from_numpy(np.random.randn(*small_shape))
     res = vol_16(x, idall__)
