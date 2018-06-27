@@ -39,3 +39,15 @@ def test_identity():
     x = torch.from_numpy(np.random.randn(*small_shape))
     res = vol_16(x, idall__)
     assert pytest.approx(torch.max((x-res).abs())) == 0
+
+def test_one_jacobian():
+    """
+    Jacobian of translation is one.
+    """
+    shape = [16]*2
+    act = get_density_action(shape)
+    idall = get_identity(shape)
+    idall[0] += 3
+    x = torch.ones(shape, dtype=torch.float64)
+    y = act(x, idall)
+    assert pytest.approx(x.numpy()) == y.numpy()
