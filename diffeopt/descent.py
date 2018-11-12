@@ -5,7 +5,7 @@ class Descent:
     """
     Gradient descent on a Lie group based on loss function
     """
-    def __init__(self, template, loss, cometric, compose, exponential, identity, rate=5e-0):
+    def __init__(self, loss, cometric, compose, exponential, identity, rate=5e-0):
         """
         loss: Loss function defined on the group.
         cometric: linear map transforming a momentum into a velocity
@@ -15,14 +15,13 @@ class Descent:
         rate: learning rate, or time step
 
         The descent takes a few steps:
-        1. compute the loss `loss(template, current, identity)`
+        1. compute the loss `loss(current, identity)`
         2. obtain a momentum by taking the derivative wrt the last term
         3. compute the velocity with the cometric
         4. update the group element with the exponential of the velocity
         """
         # TODO: update inverse group element as well?
         # TODO: compose, exponential, identity, cometric are group methods
-        self.template = template
         self.loss = loss
         self.cometric = cometric
         self.compose = compose
@@ -46,7 +45,7 @@ class Descent:
         idall = self.identity
         idall_ = torch.tensor(idall, requires_grad=True)
         # compute loss at identity
-        self.current_loss = self.loss(self.template, current, idall_)
+        self.current_loss = self.loss(current, idall_)
         self.writer.add_scalar('loss', self.current_loss, self.step)
         # compute momentum
         self.current_loss.backward()

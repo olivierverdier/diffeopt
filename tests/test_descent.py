@@ -16,8 +16,8 @@ def test_run():
     act = get_density_action(I0.shape)
     def cost(img):
         return dist(img, I1)
-    loss = ActionLoss(act, cost)
-    des = Descent(I0, loss, get_laplace_cometric(I0.shape), get_composition(I0.shape), get_exponential(I0.shape), get_identity(I0.shape))
+    loss = ActionLoss(act, cost, I0)
+    des = Descent(loss, get_laplace_cometric(I0.shape), get_composition(I0.shape), get_exponential(I0.shape), get_identity(I0.shape))
     des.initialize()
     for i in range(2):
         des.increment()
