@@ -1,8 +1,6 @@
 from tensorboardX import SummaryWriter
 import torch
 
-from .utils import get_identity
-
 class Descent:
     """
     Gradient descent on a Lie group based on loss function
