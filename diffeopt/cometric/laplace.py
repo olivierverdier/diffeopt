@@ -2,11 +2,11 @@ from ..utils import get_identity
 import numpy as np
 import torch
 
-def get_laplace_cometric(shape):
+def get_laplace_cometric(shape, s=1):
     idx, idy = get_identity(shape)
     lap = 4. - 2.*(np.cos(2.*np.pi*idx/shape[0]) + np.cos(2.*np.pi*idy/shape[1]))
     lap[0,0] = 1.
-    lapinv = 1./lap
+    lapinv = (1./lap)**s
     lap[0,0] = 0.
     lapinv[0,0] = 1.
     def cometric(momentum):
