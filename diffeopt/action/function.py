@@ -25,6 +25,7 @@ def get_composition_action(shape, compute_id=False):
         @staticmethod
         def forward(ctx, q, g):
             ctx.save_for_backward(q,)
+            g = g.data
             if g.requires_grad and not compute_id:
                 # gradient can only be obtained if g is the identity
                 return q

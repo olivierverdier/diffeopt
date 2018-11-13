@@ -21,6 +21,7 @@ def get_density_action(shape, compute_id=False):
         @staticmethod
         def forward(ctx, x, g):
             ctx.save_for_backward(x)
+            g = g.data
             if g.requires_grad and not compute_id:
                 return x
 
