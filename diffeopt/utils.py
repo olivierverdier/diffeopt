@@ -3,14 +3,6 @@ import torch
 import ddmatch
 
 
-def get_identity(shape, requires_grad=False):
-    """
-    Identity diffeomorphisms.
-    """
-    idx, idy = np.meshgrid(np.arange(shape[0],dtype=float), np.arange(shape[1], dtype=float))
-    tensor = torch.tensor([idx, idy], requires_grad=requires_grad)
-    return tensor
-
 def get_distance_to(dist, target):
     """
     Utility function: given a distance and a target,

@@ -2,7 +2,7 @@ import numpy as np
 import torch
 from diffeopt.action.function import get_composition_action
 from diffeopt.action.density import get_density_action
-from diffeopt.utils import get_identity
+from diffeopt.group import get_identity
 
 import pytest
 
