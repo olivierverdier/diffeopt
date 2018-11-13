@@ -36,8 +36,7 @@ class Descent:
         Compute momentum at current group element `current`.
         """
         # prepare identity diffeo
-        idall = self.group.element().data
-        idall_ = torch.tensor(idall, requires_grad=True)
+        idall_ = self.group.get_raw_identity(requires_grad=True)
         # compute loss at identity
         current_loss = self.loss(current, idall_)
         # compute momentum

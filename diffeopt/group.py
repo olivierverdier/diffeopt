@@ -2,14 +2,6 @@ import numpy as np
 import torch
 import ddmatch
 
-def get_identity(shape, requires_grad=False):
-    """
-    Identity diffeomorphisms.
-    """
-    idx, idy = np.meshgrid(np.arange(shape[0],dtype=float), np.arange(shape[1], dtype=float))
-    tensor = torch.tensor([idx, idy], requires_grad=requires_grad)
-    return tensor
-
 def get_composition(shape):
     compose_ = ddmatch.core.generate_optimized_diffeo_composition(np.zeros(shape))
     def compose(g1, g2):
@@ -28,12 +20,19 @@ class DiffeoGroup:
     """
     def __init__(self, shape):
         self.shape = shape
-        self.id_ = get_identity(shape)
         self.composition_ = get_composition(shape)
+
+    def get_raw_identity(self, requires_grad=False):
+        """
+        Identity diffeomorphisms as tensors.
+        """
+        idx, idy = np.meshgrid(np.arange(self.shape[0],dtype=float), np.arange(self.shape[1], dtype=float))
+        tensor = torch.tensor([idx, idy], requires_grad=requires_grad)
+        return tensor
 
     def element(self, data=None, data_inv=None):
         if data is None and data_inv is None:
-            data, data_inv =  [get_identity(self.shape) for i in range(2)]
+            data, data_inv =  [self.get_raw_identity() for i in range(2)]
         elif data is None or data_inv is None:
             raise ValueError()
         return Diffeo(self, data, data_inv)
@@ -45,7 +44,7 @@ class DiffeoGroup:
         """
         Approximate exponential by forward (Euler) method.
         """
-        return get_identity(self.shape) + velocity
+        return self.get_raw_identity() + velocity
 
     def exponential(self, velocity):
         """

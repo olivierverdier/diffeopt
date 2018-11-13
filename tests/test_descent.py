@@ -19,7 +19,7 @@ def test_run():
         return dist(img, I1)
     loss = ActionLoss(act, cost, I0)
     group = DiffeoGroup(shape)
-    ident = group.element().data
+    ident = group.get_raw_identity()
     des = Descent(loss, get_laplace_cometric(ident), group)
     des.initialize()
     for i in range(2):
