@@ -51,6 +51,9 @@ class Descent:
         self.current_loss.backward()
         momentum = idall_.grad
         # check if something went wrong
+        # TODO: check how much the following check slows down each step
+        if torch.sum(torch.isnan(momentum)):
+            raise Exception("NaN")
         return momentum
 
     def integrate(self, momentum):
@@ -70,9 +73,6 @@ class Descent:
 
     def increment(self):
         momentum = self.compute_momentum(self.current)
-        # TODO: check how much the following check slows down each step
-        if torch.sum(torch.isnan(momentum)):
-            raise Exception("NaN")
         updated = self.integrate(-self.rate*momentum)
         self.current = updated
         self.step += 1
