@@ -45,16 +45,15 @@ class Descent:
         idall = self.identity
         idall_ = torch.tensor(idall, requires_grad=True)
         # compute loss at identity
-        self.current_loss = self.loss(current, idall_)
-        self.writer.add_scalar('loss', self.current_loss, self.step)
+        current_loss = self.loss(current, idall_)
         # compute momentum
-        self.current_loss.backward()
+        current_loss.backward()
         momentum = idall_.grad
         # check if something went wrong
         # TODO: check how much the following check slows down each step
         if torch.sum(torch.isnan(momentum)):
             raise Exception("NaN")
-        return momentum
+        return current_loss, momentum
 
     def integrate(self, momentum):
         """
@@ -72,10 +71,14 @@ class Descent:
         return updated
 
     def increment(self):
-        momentum = self.compute_momentum(self.current)
+        current_loss, momentum = self.compute_momentum(self.current)
+        self.log(current_loss)
         updated = self.integrate(-self.rate*momentum)
         self.current = updated
         self.step += 1
+
+    def log(self, loss):
+        self.writer.add_scalar('loss', loss, self.step)
 
     def run(self, nb_steps):
         for i in range(nb_steps):
