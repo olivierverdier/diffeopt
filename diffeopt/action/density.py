@@ -3,14 +3,12 @@ import numpy as np
 from ddmatch.core import (
     generate_optimized_image_gradient,
     generate_optimized_image_composition,
-    generate_optimized_jacobian_forward,
     )
 
 # TODO: implement forward or backward in numba??
 
 def get_density_action(shape, compute_id=False):
     image = np.zeros(shape)
-    compute_jacobian = generate_optimized_jacobian_forward(image)
     compute_grad = generate_optimized_image_gradient(image)
     compute_pullback = generate_optimized_image_composition(image)
     class DensityAction(torch.autograd.Function):

@@ -1,7 +1,7 @@
 import torch
 import numpy as np
 
-from ddmatch.core import generate_optimized_image_composition, generate_optimized_image_gradient, generate_optimized_diffeo_composition
+from ddmatch.core import generate_optimized_image_gradient, generate_optimized_image_composition
 
 def get_composition_action(shape, compute_id=False):
     """
@@ -14,7 +14,6 @@ def get_composition_action(shape, compute_id=False):
     I0 = np.zeros(shape)
     image_compose = generate_optimized_image_composition(I0)
     image_gradient = generate_optimized_image_gradient(I0)
-    diffeo_compose = generate_optimized_diffeo_composition(I0)
 
     class CompositionAction(torch.autograd.Function):
         """
