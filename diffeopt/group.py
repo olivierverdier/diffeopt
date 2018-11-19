@@ -37,6 +37,11 @@ class DiffeoGroup:
             raise ValueError()
         return Diffeo(self, data, data_inv)
 
+    def identity(self, requires_grad=True):
+        elt = self.element()
+        elt.data.requires_grad = requires_grad
+        return elt
+
     def compose_(self, d1, d2):
         return self.composition_(d1, d2)
 

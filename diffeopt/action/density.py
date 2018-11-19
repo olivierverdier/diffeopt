@@ -21,11 +21,15 @@ def get_density_action(shape, compute_id=False):
         @staticmethod
         def forward(ctx, x, g):
             ctx.save_for_backward(x)
-            g = g.data
-            if g.requires_grad and not compute_id:
-                return x
-
-            g_ = g.detach().numpy()
+            if torch.is_tensor(g):
+                # g must be the identity tensor
+                if not compute_id:
+                    return x
+                else:
+                    torch_data = g
+            else:
+                torch_data = g.data
+            g_ = torch_data.detach().numpy()
             gx_x, gx_y, gy_x, gy_y = [np.zeros(shape) for i in range(4)]
             compute_grad(g_[0], gx_x, gx_y)
             compute_grad(g_[1], gy_x, gy_y)

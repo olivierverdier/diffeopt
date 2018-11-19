@@ -4,8 +4,20 @@ from diffeopt.action.function import get_composition_action
 from diffeopt.action.density import get_density_action
 from diffeopt.group import DiffeoGroup
 
+mse = torch.nn.MSELoss()
+
 import pytest
 
+
+def test_grad_loss():
+    small_shape = [16]*2
+    group = DiffeoGroup(small_shape)
+    comp_16 = get_composition_action(small_shape)
+
+    idall = group.get_raw_identity(requires_grad=True)
+    I16 = torch.randn(*small_shape, dtype=torch.float64)
+    loss = mse(comp_16(I16, idall), torch.zeros(small_shape, dtype=torch.float64))
+    torch.autograd.backward(loss)
 
 def test_function():
     small_shape = [16]*2
@@ -16,7 +28,7 @@ def test_function():
     I16 = torch.randn(*small_shape, dtype=torch.float64)
     torch.autograd.gradcheck(
         comp_16,
-        inputs=(I16, idall.double())
+        inputs=(I16, idall)
     )
 
 def test_density():
@@ -27,7 +39,7 @@ def test_density():
     x = torch.randn(*small_shape, dtype=torch.float64)
     torch.autograd.gradcheck(
         vol_16,
-        inputs=(x, idall.double()),
+        inputs=(x, idall),
         atol=1e-10,
         )
 
@@ -36,10 +48,9 @@ def test_identity():
     small_shape = [16]*2
     group = DiffeoGroup(small_shape)
     vol_16 = get_density_action(small_shape)
-    idall_ = group.get_raw_identity()
-    idall__ = idall_.double()
+    idall_ = group.element()
     x = torch.from_numpy(np.random.randn(*small_shape))
-    res = vol_16(x, idall__)
+    res = vol_16(x, idall_)
     assert pytest.approx(torch.max((x-res).abs())) == 0
 
 def test_one_jacobian():
@@ -49,8 +60,10 @@ def test_one_jacobian():
     shape = [16]*2
     group = DiffeoGroup(shape)
     act = get_density_action(shape)
-    idall = group.get_raw_identity()
-    idall[0] += 3
+    idall = group.element()
+    vel = group.zero()
+    vel[0] += 3
+    trans = group.exponential(vel)
     x = torch.ones(shape, dtype=torch.float64)
-    y = act(x, idall)
+    y = act(x, trans)
     assert pytest.approx(x.numpy()) == y.numpy()

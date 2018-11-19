@@ -25,12 +25,16 @@ def get_composition_action(shape, compute_id=False):
         @staticmethod
         def forward(ctx, q, g):
             ctx.save_for_backward(q,)
-            g = g.data
-            if g.requires_grad and not compute_id:
-                # gradient can only be obtained if g is the identity
-                return q
+            if torch.is_tensor(g):
+                # g must be the identity tensor
+                if not compute_id:
+                    return q
+                else:
+                    torch_data = g
+            else:
+                torch_data = g.data
             y = np.zeros(q.shape)
-            g_ = g.detach().numpy()
+            g_ = torch_data.detach().numpy()
             q_ = q.detach().numpy()
             image_compose(q_, g_[0], g_[1], y)
             res = torch.from_numpy(y)
