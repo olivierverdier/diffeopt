@@ -1,5 +1,7 @@
 from diffeopt.group import DiffeoGroup
 import torch
+from diffeopt.utils import get_random_diffeo
+import numpy as np
 
 def test_element():
     g = DiffeoGroup((16,16))
@@ -25,6 +27,13 @@ def test_integ():
     velocity = vel.reshape(-1,1,1) * torch.ones((dim,16,16), dtype=torch.float64)
     g.exponential(velocity)
     # TODO: test that it is a translation
+
+def test_inverse():
+    group = DiffeoGroup((16,16))
+    defm = get_random_diffeo(group)
+    aid = defm.compose(defm.inverse())
+    rid = group.get_raw_identity()
+    assert np.allclose(rid.numpy(), aid.data.numpy(), rtol=1e-9, atol=1e-1)
 
 
 

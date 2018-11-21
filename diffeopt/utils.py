@@ -24,3 +24,16 @@ def normalize(I):
     """
     factor = get_volume(I.shape)/I.sum()
     return I*factor
+
+
+from diffeopt.cometric import laplace
+def get_random_diffeo(group, nb_steps=10, scale=1.):
+    cometric = laplace.get_laplace_cometric(group, s=2)
+    rm = np.random.randn(*group.zero().shape)
+    rv = cometric(rm)
+    vmx = rv.abs().max()
+    rv_ = 2*rv/vmx/nb_steps*scale
+    current = group.element()
+    for i in range(nb_steps):
+        current = group.exponential(rv_).compose(current)
+    return current

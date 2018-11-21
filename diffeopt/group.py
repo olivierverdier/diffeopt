@@ -78,3 +78,5 @@ class Diffeo:
         data_inv = self.group.compose_(other.data_inv, self.data_inv)
         return self.group.element(data, data_inv)
 
+    def inverse(self):
+        return self.group.element(self.data_inv, self.data)
