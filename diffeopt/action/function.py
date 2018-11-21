@@ -3,6 +3,8 @@ import numpy as np
 
 from ddmatch.core import generate_optimized_image_gradient, generate_optimized_image_composition
 
+from ..group import DiffeoGroup
+
 def get_composition_action(shape, compute_id=False):
     """
     compute_id: right composition with the identity
@@ -15,6 +17,11 @@ def get_composition_action(shape, compute_id=False):
     image_compose = generate_optimized_image_composition(I0)
     image_gradient = generate_optimized_image_gradient(I0)
 
+    from .density import get_density_action
+    density_action = get_density_action(shape)
+
+    group = DiffeoGroup(shape)
+
     class CompositionAction(torch.autograd.Function):
         """
         Right composition action
@@ -23,15 +30,17 @@ def get_composition_action(shape, compute_id=False):
         """
         @staticmethod
         def forward(ctx, q, g):
-            ctx.save_for_backward(q,)
             if torch.is_tensor(g):
                 # g must be the identity tensor
-                if not compute_id:
-                    return q
-                else:
-                    torch_data = g
+                torch_data = g
+                to_save = g
             else:
                 torch_data = g.data
+                to_save = g.data_inv
+            ctx.save_for_backward(q, to_save)
+            if torch.is_tensor(g) and not compute_id:
+                # if g is a tensor, it must be the identity
+                return q
             y = np.zeros(q.shape)
             g_ = torch_data.detach().numpy()
             q_ = q.detach().numpy()
@@ -45,11 +54,18 @@ def get_composition_action(shape, compute_id=False):
             This is the adjoint of the derivative only
             if g was the identity.
             """
-            q, = ctx.saved_tensors
-            q_ = q.detach().numpy()
-            gxout, gyout = np.zeros_like(q_), np.zeros_like(q_)
-            image_gradient(q_, gxout, gyout)
-            grad = torch.tensor([gxout, gyout])
-            result = grad*grad_output
-            return (None, result)
+            q, data_inv = ctx.saved_tensors
+            if ctx.needs_input_grad[1]:
+                # Derivative wrt g = Id
+                q_ = q.detach().numpy()
+                gxout, gyout = np.zeros_like(q_), np.zeros_like(q_)
+                image_gradient(q_, gxout, gyout)
+                grad = torch.tensor([gxout, gyout])
+                result = grad*grad_output
+                return (grad_output, result)
+            else:
+                # Derivative wrt q
+                g = group.element(data_inv, None)
+                img_grad = density_action(grad_output, g)
+                return (img_grad, None)
     return CompositionAction.apply

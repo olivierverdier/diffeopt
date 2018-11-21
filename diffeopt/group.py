@@ -22,6 +22,10 @@ class DiffeoGroup:
         self.shape = shape
         self.composition_ = get_composition(shape)
 
+    def zero(self):
+        new_shape = [2,] + list(self.shape)
+        return torch.zeros(new_shape, dtype=torch.float64)
+
     def get_raw_identity(self, requires_grad=False):
         """
         Identity diffeomorphisms as tensors.
@@ -33,8 +37,8 @@ class DiffeoGroup:
     def element(self, data=None, data_inv=None):
         if data is None and data_inv is None:
             data, data_inv =  [self.get_raw_identity() for i in range(2)]
-        elif data is None or data_inv is None:
-            raise ValueError()
+        # elif data is None or data_inv is None:
+        #     raise ValueError()
         return Diffeo(self, data, data_inv)
 
     def identity(self, requires_grad=True):
