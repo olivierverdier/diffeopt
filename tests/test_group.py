@@ -12,7 +12,7 @@ def test_compose():
     id1 = g.element()
     id2 = g.element()
     id3 = id1.compose(id2)
-    assert torch.allclose(id1.data, id3.data)
+    assert torch.allclose(id1.forward, id3.forward)
     # TODO: add other tests here
 
 def test_exponential():
@@ -33,7 +33,7 @@ def test_inverse():
     defm = get_random_diffeo(group)
     aid = defm.compose(defm.inverse())
     rid = group.get_raw_identity()
-    assert np.allclose(rid.numpy(), aid.data.numpy(), rtol=1e-9, atol=1e-1)
+    assert np.allclose(rid.numpy(), aid.forward.numpy(), rtol=1e-9, atol=1e-1)
 
 
 

@@ -34,16 +34,16 @@ class DiffeoGroup:
         tensor = torch.tensor([idx, idy], requires_grad=requires_grad)
         return tensor
 
-    def element(self, data=None, data_inv=None):
-        if data is None and data_inv is None:
-            data, data_inv =  [self.get_raw_identity() for i in range(2)]
-        # elif data is None or data_inv is None:
+    def element(self, forward=None, backward=None):
+        if forward is None and backward is None:
+            forward, backward =  [self.get_raw_identity() for i in range(2)]
+        # elif forward is None or backward is None:
         #     raise ValueError()
-        return Diffeo(self, data, data_inv)
+        return Diffeo(self, forward, backward)
 
     def identity(self, requires_grad=True):
         elt = self.element()
-        elt.data.requires_grad = requires_grad
+        elt.forward.requires_grad = requires_grad
         return elt
 
     def compose_(self, d1, d2):
@@ -59,24 +59,24 @@ class DiffeoGroup:
         """
         An approximation of the exponenttial.
         """
-        data = self.exponential_(velocity)
-        data_inv = self.exponential_(-velocity)
-        return self.element(data, data_inv)
+        forward = self.exponential_(velocity)
+        backward = self.exponential_(-velocity)
+        return self.element(forward, backward)
 
 
 class Diffeo:
     """
     A diffeomorphism and its inverse.
     """
-    def __init__(self, group, data, data_inv):
+    def __init__(self, group, forward, backward):
         self.group = group
-        self.data = data
-        self.data_inv = data_inv
+        self.forward = forward
+        self.backward = backward
 
     def compose(self, other):
-        data = self.group.compose_(self.data, other.data)
-        data_inv = self.group.compose_(other.data_inv, self.data_inv)
-        return self.group.element(data, data_inv)
+        forward = self.group.compose_(self.forward, other.forward)
+        backward = self.group.compose_(other.backward, self.backward)
+        return self.group.element(forward, backward)
 
     def inverse(self):
-        return self.group.element(self.data_inv, self.data)
+        return self.group.element(self.backward, self.forward)

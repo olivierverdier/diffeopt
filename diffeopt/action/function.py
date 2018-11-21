@@ -35,8 +35,8 @@ def get_composition_action(shape, compute_id=False):
                 torch_data = g
                 to_save = g
             else:
-                torch_data = g.data
-                to_save = g.data_inv
+                torch_data = g.forward
+                to_save = g.backward
             ctx.save_for_backward(q, to_save)
             if torch.is_tensor(g) and not compute_id:
                 # if g is a tensor, it must be the identity

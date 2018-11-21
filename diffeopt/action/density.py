@@ -26,7 +26,7 @@ def get_density_action(shape, compute_id=False):
                 else:
                     torch_data = g
             else:
-                torch_data = g.data
+                torch_data = g.forward
             g_ = torch_data.detach().numpy()
             gx_x, gx_y, gy_x, gy_y = [np.zeros(shape) for i in range(4)]
             compute_grad(g_[0], gx_x, gx_y)
