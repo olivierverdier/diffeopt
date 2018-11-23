@@ -23,6 +23,23 @@ class Descent:
         self.rate = rate
         self.group = group
 
+    def run(self, nb_steps):
+        for i in range(nb_steps):
+            self.increment()
+
+    def increment(self):
+        current_loss, momentum = self.compute_momentum(self.current)
+        self.log(current_loss)
+        # compute velocity
+        velocity = self.cometric(momentum)
+        updated = self.compute_update(-self.rate*velocity)
+        self.current = updated
+        self.step += 1
+
+    def log(self, loss):
+        self.writer.add_scalar('loss', loss, self.step)
+
+
     def initialize(self):
         """
         Initialize writer, current group element and step.
@@ -48,32 +65,14 @@ class Descent:
             raise Exception("NaN")
         return current_loss, momentum
 
-    def integrate(self, momentum):
+    def compute_update(self, velocity):
         """
         Return a new group element updated from current
-        in the direction `velocity`, which is computed
-        from the momentum with the cometric.
+        in the direction `velocity`
         """
-        # TODO: should be a method of a group class
-        # compute velocity
-        velocity = self.cometric(momentum)
         # compute exponential
         increment = self.group.exponential(velocity)
         # update by composition with increment
         updated = self.current.compose(increment)
         return updated
-
-    def increment(self):
-        current_loss, momentum = self.compute_momentum(self.current)
-        self.log(current_loss)
-        updated = self.integrate(-self.rate*momentum)
-        self.current = updated
-        self.step += 1
-
-    def log(self, loss):
-        self.writer.add_scalar('loss', loss, self.step)
-
-    def run(self, nb_steps):
-        for i in range(nb_steps):
-            self.increment()
 
