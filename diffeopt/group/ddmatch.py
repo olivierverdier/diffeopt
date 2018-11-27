@@ -20,3 +20,15 @@ class DiffeoGroup(BaseDiffeoGroup):
 
     def compose_(self, d1, d2):
         return self.composition_(d1, d2)
+
+
+from .representation import Representation
+from ..action.function import get_composition_action
+class FunctionRepresentation(Representation):
+    def get_representation(self, group):
+        return get_composition_action(group.shape)
+
+from ..action.density import get_density_action
+class DensityRepresentation(Representation):
+    def get_representation(self, group):
+        return get_density_action(group.shape)
