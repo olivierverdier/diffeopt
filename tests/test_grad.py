@@ -63,7 +63,7 @@ def test_identity():
     idall_ = group.element()
     x = torch.from_numpy(np.random.randn(*small_shape))
     res = vol_16(x, idall_)
-    assert pytest.approx(torch.max((x-res).abs())) == 0
+    assert pytest.approx(torch.max((x-res).abs()).numpy()) == 0
 
 def test_one_jacobian():
     """
