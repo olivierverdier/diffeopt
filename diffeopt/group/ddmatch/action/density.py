@@ -38,7 +38,7 @@ def get_density_action(shape, compute_id=False):
 
             jac = gx_x*gy_y - gx_y*gy_x # Jacobian
 
-            pb = np.zeros_like(x)
+            pb = np.zeros(np.shape(x))
             compute_pullback(x.detach().numpy(), g_[0], g_[1], pb)
             res = torch.from_numpy(pb*jac)
             return res

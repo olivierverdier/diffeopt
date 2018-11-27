@@ -1,4 +1,4 @@
-from diffeopt.group.ddmatch import DiffeoGroup
+from diffeopt.group.ddmatch.group import DiffeoGroup
 import torch
 from diffeopt.utils import get_random_diffeo
 import numpy as np

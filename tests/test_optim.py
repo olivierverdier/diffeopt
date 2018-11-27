@@ -1,7 +1,7 @@
 import torch
 from diffeopt.optim import OrbitOptimizer
-from diffeopt.group.ddmatch import FunctionRepresentation, DensityRepresentation
-from diffeopt.group.ddmatch import DiffeoGroup
+from diffeopt.group.ddmatch.representation import FunctionRepresentation, DensityRepresentation
+from diffeopt.group.ddmatch.group import DiffeoGroup
 from diffeopt.sum_representation import get_sum_representation
 from diffeopt.distance.information import information_distance
 from torch.nn import MSELoss
@@ -39,7 +39,7 @@ def test_deep_optimisation():
     group = DiffeoGroup(I0.shape)
     cometric = get_laplace_cometric(group, s=2)
 
-    seq = Sequential(*[FunctionRepresentation(group) for i in range(8)])
+    seq = Sequential(*[FunctionRepresentation(group) for i in range(3)])
     do = DeepOptimizer(seq.parameters(), lr=.1, cometric=cometric, weight_decay=1.)
     for i in range(2):
         do.zero_grad()

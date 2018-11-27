@@ -1,8 +1,8 @@
 import numpy as np
 import torch
-from diffeopt.action.function import get_composition_action
-from diffeopt.action.density import get_density_action
-from diffeopt.group.ddmatch import DiffeoGroup
+from diffeopt.group.ddmatch.action.function import get_composition_action
+from diffeopt.group.ddmatch.action.density import get_density_action
+from diffeopt.group.ddmatch.group import DiffeoGroup
 
 mse = torch.nn.MSELoss()
 

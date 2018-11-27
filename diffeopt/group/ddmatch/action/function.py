@@ -3,7 +3,7 @@ import numpy as np
 
 from ddmatch.core import generate_optimized_image_gradient, generate_optimized_image_composition
 
-from ..group.ddmatch import DiffeoGroup
+from ..group import DiffeoGroup
 
 def get_composition_action(shape, compute_id=False):
     """
