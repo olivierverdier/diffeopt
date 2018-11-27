@@ -5,7 +5,7 @@ import torch
 from diffeopt.descent import Descent
 from diffeopt.action_loss import ActionLoss
 from diffeopt.action.density import get_density_action
-from diffeopt.group import DiffeoGroup
+from diffeopt.group.ddmatch import DiffeoGroup
 from diffeopt.cometric.laplace import get_laplace_cometric
 from diffeopt.distance.information import information_distance
 
