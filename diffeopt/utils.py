@@ -1,6 +1,5 @@
 import numpy as np
 import torch
-import ddmatch
 
 
 def get_volume(shape):
