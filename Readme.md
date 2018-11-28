@@ -8,6 +8,11 @@ The general idea is to be able to minimise expressions of the form F(g . x), whe
 
 This can be used to do direct matching or indirect matching, both with several kinds of regularisation.
 
+Check out [this example notebook](https://gist.github.com/olivierverdier/2d30e409111376ff89b8e54ab82a8f9c) which illustrates the two kinds of matching.
+
+<a href="https://gist.github.com/olivierverdier/2d30e409111376ff89b8e54ab82a8f9c"><img alt="deformation" src="https://raw.githubusercontent.com/olivierverdier/diffeopt/master/img/deformation.png" /></a>
+
+
 ## Direct Matching with Orbit Minimisation
 
 Suppose that we have a *template* `I0` that we will use for the matching.
