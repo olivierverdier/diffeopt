@@ -30,8 +30,8 @@ srep = get_sum_representation(FunctionRepresentation(group), DensityRepresentati
 Now we prepare an optimizer. It needs a learning rate and a cometric, as well as the network's parameters to be initialized:
 ```python
 from diffeopt.cometric.laplace import get_laplace_cometric
-from diffeopt.optim import OrbitOptimizer
-oo = OrbitOptimizer(srep.parameters(), lr=1e-1, cometric=get_laplace_cometric(group, s=2))
+from diffeopt.optim import GroupOptimizer
+go = GropuOptimizer(srep.parameters(), lr=1e-1, cometric=get_laplace_cometric(group, s=2))
 ```
 
 We now prepare the necessary variables to compute the loss function.
@@ -48,7 +48,7 @@ Note that the loss function can be anything you like.
 Here, for direct matching, it depends on a target image `I1`.
 ```python
 for i in range(2**9):
-    oo.zero_grad()
+    go.zero_grad()
     # forward pass
     I_, vol_ = srep(I0, vol)
     # the following loss function can be anything you like
@@ -58,5 +58,5 @@ for i in range(2**9):
     # compute momenta
     loss.backward()
     # update the group element
-    oo.step()
+    go.step()
 ```

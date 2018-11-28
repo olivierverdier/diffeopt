@@ -1,5 +1,4 @@
 import torch
-from diffeopt.optim import OrbitOptimizer
 from diffeopt.group.ddmatch.representation import FunctionRepresentation, DensityRepresentation
 from diffeopt.group.ddmatch.group import DiffeoGroup
 from diffeopt.sum_representation import get_sum_representation
@@ -10,7 +9,7 @@ from diffeopt.utils import normalize
 
 mse = MSELoss()
 
-from diffeopt.optim import OrbitOptimizer
+from diffeopt.optim import GroupOptimizer
 
 def test_orbit_optimisation():
     shape = (16, 16)
@@ -19,7 +18,7 @@ def test_orbit_optimisation():
     cometric = get_laplace_cometric(group, s=2)
 
     sum_rep = get_sum_representation(FunctionRepresentation(group), DensityRepresentation(group))
-    oo = OrbitOptimizer(sum_rep.parameters(), lr=.1, cometric=cometric)
+    oo = GroupOptimizer(sum_rep.parameters(), lr=.1, cometric=cometric)
     vol = normalize(torch.ones_like(I1))
     vol__ = vol + 1e-2*torch.randn_like(vol)
     for i in range(2):
@@ -31,7 +30,7 @@ def test_orbit_optimisation():
 
 
 from torch.nn import Sequential
-from diffeopt.optim import DeepOptimizer
+from diffeopt.optim import VelocityOptimizer
 
 def test_deep_optimisation():
     shape = (16, 16)
@@ -40,7 +39,7 @@ def test_deep_optimisation():
     cometric = get_laplace_cometric(group, s=2)
 
     seq = Sequential(*[FunctionRepresentation(group) for i in range(3)])
-    do = DeepOptimizer(seq.parameters(), lr=.1, cometric=cometric, weight_decay=1.)
+    do = VelocityOptimizer(seq.parameters(), lr=.1, cometric=cometric, weight_decay=1.)
     for i in range(2):
         do.zero_grad()
         I_ = seq(I0)

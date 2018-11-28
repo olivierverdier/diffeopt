@@ -16,20 +16,26 @@ class DiffeoOptimizer(torch.optim.Optimizer):
         raise NotImplementedError()
 
 
-class OrbitOptimizer(DiffeoOptimizer):
+class GroupOptimizer(DiffeoOptimizer):
+    """
+    Update group elements from a momentum.
+    """
     def __init__(self, params, lr, cometric):
         defaults = {'lr': lr, 'cometric': cometric}
-        super(OrbitOptimizer, self).__init__(params, defaults)
+        super(GroupOptimizer, self).__init__(params, defaults)
 
     def _update_parameter(self, parameter, velocity, group):
         grad_direction = -group['lr']*velocity
         parameter.base.deformation = parameter.base.deformation.compose(parameter.base.group.exponential(grad_direction))
 
 
-class DeepOptimizer(DiffeoOptimizer):
+class VelocityOptimizer(DiffeoOptimizer):
+    """
+    Update velocity from a momentum and a weight decay.
+    """
     def __init__(self, params, lr, cometric, weight_decay):
         defaults = {'lr': lr, 'cometric': cometric, 'weight_decay':weight_decay}
-        super(DeepOptimizer, self).__init__(params, defaults)
+        super(VelocityOptimizer, self).__init__(params, defaults)
 
     def _update_parameter(self, parameter, velocity, group):
         direction = -group['lr']*(velocity + group['weight_decay']*parameter.base.velocity)
