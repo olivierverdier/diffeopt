@@ -30,7 +30,8 @@ def test_integ():
 
 def test_inverse():
     group = DiffeoGroup((16,16))
-    defm = get_random_diffeo(group, scale=.1)
+    gen = torch.Generator()
+    defm = get_random_diffeo(group, scale=.1, generator=gen)
     aid = defm.compose(defm.inverse())
     rid = group.get_raw_identity()
     assert np.allclose(rid.numpy(), aid.forward.numpy(), rtol=1e-9, atol=1e-1)
