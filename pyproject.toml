@@ -1,0 +1,17 @@
+[project]
+name = "diffeopt"
+version = "0.1.0"
+authors = [{name = "Olivier Verdier", email="olivier.verdier@gmail.com"}]
+description = "Optimisation on Diffeomorphisms"
+dependencies = [
+    "ddmatch @ git+https://github.com/olivierverdier/ddmatch",
+    "torch",
+    "numpy",
+]
+readme = "README.md"
+license = {file = "LICENSE"}
+
+[tool.pytest.ini_options]
+pythonpath = [
+  "."
+]

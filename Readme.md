@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/olivierverdier/diffeopt.svg?branch=master)](https://travis-ci.com/olivierverdier/diffeopt)
+[![Build Status](https://github.com/olivierverdier/diffeopt/actions/workflows/python_package.yml/badge.svg?branch=main)](https://github.com/olivierverdier/diffeopt/actions/workflows/python_package.yml?query=branch%3Amain)
 
 # Diffeopt: optimisation on diffeomorphisms
 
