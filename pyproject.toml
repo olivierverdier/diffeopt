@@ -8,6 +8,7 @@ dependencies = [
     "torch",
     "numpy",
     "numba", # only used in `ddmatch`
+    "matplotlib", # only used in `ddmatch`
 ]
 readme = "README.md"
 license = {file = "LICENSE"}
