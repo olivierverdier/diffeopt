@@ -18,7 +18,7 @@ def normalize(I):
 
 from diffeopt.cometric import laplace
 
-def get_random_diffeo(group, nb_steps=10, scale=1.):
+def get_random_diffeo(group: "BaseDiffeoGroup", nb_steps:int=10, scale:float=1.) -> torch.Tensor:
     cometric = laplace.get_laplace_cometric(group, s=2)
     rm = torch.randn(*group.zero().shape)
     rv = cometric(rm)
