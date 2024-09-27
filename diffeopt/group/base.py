@@ -1,6 +1,10 @@
 import numpy as np
 import torch
 
+from dataclasses import dataclass
+
+from typing_extensions import Self
+
 # TODO: put element exception back
 
 
@@ -49,20 +53,19 @@ class BaseDiffeoGroup:
         backward = self.exponential_(-velocity)
         return self.element(forward, backward)
 
-
+@dataclass
 class Diffeo:
     """
     A diffeomorphism and its inverse.
     """
-    def __init__(self, group, forward, backward):
-        self.group = group
-        self.forward = forward
-        self.backward = backward
+    group: BaseDiffeoGroup
+    forward: torch.Tensor
+    backward: torch.Tensor
 
-    def compose(self, other):
+    def compose(self, other: Self) -> Self:
         forward = self.group.compose_(self.forward, other.forward)
         backward = self.group.compose_(other.backward, self.backward)
         return self.group.element(forward, backward)
 
-    def inverse(self):
+    def inverse(self: Self) -> Self:
         return self.group.element(self.backward, self.forward)
