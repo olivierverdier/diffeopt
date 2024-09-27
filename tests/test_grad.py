@@ -61,7 +61,7 @@ def test_identity():
     group = DiffeoGroup(small_shape)
     vol_16 = get_density_action(small_shape)
     idall_ = group.element()
-    x = torch.from_numpy(np.random.randn(*small_shape))
+    x = torch.randn(*small_shape, dtype=torch.float64)
     res = vol_16(x, idall_)
     assert pytest.approx(torch.max((x-res).abs()).numpy()) == 0
 

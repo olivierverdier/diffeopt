@@ -21,8 +21,8 @@ class BaseDiffeoGroup:
         """
         Identity diffeomorphisms as tensors.
         """
-        idx, idy = np.meshgrid(np.arange(self.shape[0],dtype=float), np.arange(self.shape[1], dtype=float))
-        tensor = torch.from_numpy(np.array([idx, idy])).requires_grad_(requires_grad)
+        idx, idy = torch.meshgrid(torch.arange(self.shape[0],dtype=torch.float64), torch.arange(self.shape[1], dtype=torch.float64), indexing='xy')
+        tensor = torch.stack([idx, idy]).requires_grad_(requires_grad)
         return tensor
 
     def element(self, forward=None, backward=None):
