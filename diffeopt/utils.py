@@ -1,4 +1,3 @@
-import numpy as np
 import torch
 from .group.base import BaseDiffeoGroup
 
@@ -7,7 +6,7 @@ def get_volume(shape):
     """
     An arbitrary volume form.
     """
-    return np.sum(np.ones(shape))
+    return torch.sum(torch.ones(shape))
 
 def normalize(I):
     """
