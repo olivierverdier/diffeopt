@@ -1,5 +1,6 @@
 import numpy as np
 import torch
+from .group.base import BaseDiffeoGroup
 
 
 def get_volume(shape):
@@ -18,7 +19,7 @@ def normalize(I):
 
 from diffeopt.cometric import laplace
 
-def get_random_diffeo(group: "BaseDiffeoGroup", nb_steps:int=10, scale:float=1.) -> torch.Tensor:
+def get_random_diffeo(group: BaseDiffeoGroup, nb_steps:int=10, scale:float=1.) -> torch.Tensor:
     cometric = laplace.get_laplace_cometric(group, s=2)
     rm = torch.randn(*group.zero().shape)
     rv = cometric(rm)
