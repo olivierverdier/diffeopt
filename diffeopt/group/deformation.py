@@ -1,12 +1,20 @@
+from dataclasses import dataclass, field
+from .base import BaseDiffeoGroup, Diffeo
+import torch
+
+@dataclass
 class Deformation:
     """
     A container for a big or small deformation.
     """
-    def __init__(self, group):
-        self.group = group
+    group: BaseDiffeoGroup
+    _velocity: torch.Tensor = field(init=False)
+    deformation: Diffeo = field(init=False)
+
+    def __post_init__(self):
         self.reset()
 
-    def reset(self):
+    def reset(self) -> None:
         self.velocity = self.group.zero()
 
     @property
