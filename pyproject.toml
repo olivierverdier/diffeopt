@@ -21,3 +21,6 @@ build-backend = "setuptools.build_meta"
 pythonpath = [
   "."
 ]
+
+[tool.setuptools]
+packages = ["diffeopt"]
