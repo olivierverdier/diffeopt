@@ -1,5 +1,6 @@
 [![Build Status](https://github.com/olivierverdier/diffeopt/actions/workflows/python_package.yml/badge.svg?branch=main)](https://github.com/olivierverdier/diffeopt/actions/workflows/python_package.yml?query=branch%3Amain)
 [![codecov](https://codecov.io/gh/olivierverdier/diffeopt/graph/badge.svg?token=ZG233TWQQ8)](https://codecov.io/gh/olivierverdier/diffeopt)
+![Python version](https://img.shields.io/badge/Python-3.9%20|%203.10%20|%203.11%20|%203.12-blue.svg?logo=python&logoColor=gold)
 
 # Diffeopt: optimisation on diffeomorphisms
 
