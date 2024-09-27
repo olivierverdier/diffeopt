@@ -5,12 +5,12 @@ import numpy as np
 
 def test_element():
     g = DiffeoGroup((16,16))
-    g.element()
+    g.identity()
 
 def test_compose():
     g = DiffeoGroup((16,16))
-    id1 = g.element()
-    id2 = g.element()
+    id1 = g.identity()
+    id2 = g.identity()
     id3 = id1.compose(id2)
     assert torch.allclose(id1.forward, id3.forward)
     # TODO: add other tests here

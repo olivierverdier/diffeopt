@@ -25,7 +25,7 @@ def get_random_diffeo(group: BaseDiffeoGroup, nb_steps:int=10, scale:float=1., g
     vmx = rv.abs().max()
     shape_scale = (group.shape[0] + group.shape[1])/2
     rv_ = rv/nb_steps/shape_scale**2*scale*32
-    current = group.element()
+    current = group.identity()
     for i in range(nb_steps):
         current = group.exponential(rv_).compose(current)
     return current

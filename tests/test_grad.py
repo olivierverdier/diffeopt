@@ -60,7 +60,7 @@ def test_identity():
     small_shape = [16]*2
     group = DiffeoGroup(small_shape)
     vol_16 = get_density_action(small_shape)
-    idall_ = group.element()
+    idall_ = group.identity()
     x = torch.randn(*small_shape, dtype=torch.float64)
     res = vol_16(x, idall_)
     assert pytest.approx(torch.max((x-res).abs()).numpy()) == 0
@@ -72,7 +72,7 @@ def test_one_jacobian():
     shape = [16]*2
     group = DiffeoGroup(shape)
     act = get_density_action(shape)
-    idall = group.element()
+    idall = group.identity()
     vel = group.zero()
     vel[0] += 3
     trans = group.exponential(vel)
