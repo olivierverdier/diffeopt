@@ -10,14 +10,15 @@ from typing_extensions import Self
 
 # the following is largely inspired by lie_grp_diffeo
 
+@dataclass
 class BaseDiffeoGroup:
     """
     A diffeomorphism group.
     """
-    def __init__(self, shape):
-        self.shape = shape
 
     def zero(self):
+    shape: tuple
+
         new_shape = [2,] + list(self.shape)
         return torch.zeros(new_shape, dtype=torch.float64)
 
