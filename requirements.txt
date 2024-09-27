@@ -1,2 +1,0 @@
--e git+https://github.com/lanpa/tensorboard-pytorch#egg=TensorboardPytorch
--e git+https://github.com/olivierverdier/ddmatch#egg=ddmatch
