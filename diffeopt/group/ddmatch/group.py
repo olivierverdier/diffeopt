@@ -10,7 +10,7 @@ def get_composition(shape):
         g10, g11 = g1.numpy()
         g20, g21 = g2.numpy()
         compose_(g10, g11, g20, g21, tmp0, tmp1)
-        return torch.tensor([tmp0, tmp1])
+        return torch.from_numpy(np.array([tmp0, tmp1]))
     return compose
 
 class DiffeoGroup(BaseDiffeoGroup):

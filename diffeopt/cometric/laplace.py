@@ -16,5 +16,5 @@ def get_laplace_cometric(group, s=1):
         fy *= lapinv
         vx = np.real(np.fft.ifftn(fx))
         vy = np.real(np.fft.ifftn(fy))
-        return torch.tensor([vx,vy])
+        return torch.from_numpy(np.array([vx,vy]))
     return cometric
