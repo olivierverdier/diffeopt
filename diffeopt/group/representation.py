@@ -7,7 +7,7 @@ class Representation(torch.nn.Module):
     Group representation.
     """
 
-    def __init__(self, group, requires_grad=True):
+    def __init__(self, group, requires_grad:bool=True):
         super(Representation, self).__init__()
         self.representation = self.get_representation(group)
         self.perturbation = Parameter(group.get_raw_identity(), requires_grad)

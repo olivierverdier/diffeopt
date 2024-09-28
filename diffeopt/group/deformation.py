@@ -22,6 +22,6 @@ class Deformation:
         return self._velocity
 
     @velocity.setter
-    def velocity(self, velocity):
+    def velocity(self, velocity: torch.Tensor):
         self._velocity = velocity
         self.deformation = self.group.exponential(velocity)

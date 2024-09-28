@@ -2,13 +2,13 @@ import torch
 from .group.base import BaseDiffeoGroup
 
 
-def get_volume(shape):
+def get_volume(shape: tuple) -> torch.Tensor:
     """
     An arbitrary volume form.
     """
     return torch.sum(torch.ones(shape))
 
-def normalize(I):
+def normalize(I: torch.Tensor) -> torch.Tensor:
     """
     Normalize a density
     """

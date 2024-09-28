@@ -14,13 +14,13 @@ class BaseDiffeoGroup:
     A diffeomorphism group.
     """
 
-    def zero(self):
     shape: tuple
 
+    def zero(self) -> torch.Tensor:
         new_shape = [2,] + list(self.shape)
         return torch.zeros(new_shape, dtype=torch.float64)
 
-    def get_raw_identity(self, requires_grad=False):
+    def get_raw_identity(self, requires_grad:bool=False) -> torch.Tensor:
         """
         Identity diffeomorphisms as tensors.
         """
@@ -39,13 +39,13 @@ class BaseDiffeoGroup:
     def compose_(self, d1, d2):
         raise NotImplementedError()
 
-    def exponential_(self, velocity):
+    def exponential_(self, velocity: torch.Tensor) -> torch.Tensor:
         """
         Approximate exponential by forward (Euler) method.
         """
         return self.get_raw_identity() + velocity
 
-    def exponential(self, velocity):
+    def exponential(self, velocity: torch.Tensor) -> "Diffeo":
         """
         An approximation of the exponenttial.
         """
@@ -62,10 +62,10 @@ class Diffeo:
     forward: torch.Tensor
     backward: torch.Tensor
 
-    def compose(self, other: Self) -> Self:
+    def compose(self, other: Self) -> "Diffeo":
         forward = self.group.compose_(self.forward, other.forward)
         backward = self.group.compose_(other.backward, self.backward)
         return self.group.element(forward, backward)
 
-    def inverse(self: Self) -> Self:
+    def inverse(self: Self) -> "Diffeo":
         return self.group.element(self.backward, self.forward)

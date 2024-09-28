@@ -1,7 +1,7 @@
 import torch
 
-def information_distance(x, y):
-    """
+def information_distance(x: torch.Tensor, y: torch.Tensor) -> torch.Tensor:
+    r"""
     The information distance is the angle between the function $F = \sqrt{f}$ and $G = \sqrt{g}$.
     In other words, it is obtained by
     \\[
