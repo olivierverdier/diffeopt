@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod
 import torch
 
 from dataclasses import dataclass
@@ -9,7 +10,7 @@ from typing_extensions import Self
 # the following is largely inspired by lie_grp_diffeo
 
 @dataclass
-class BaseDiffeoGroup:
+class BaseDiffeoGroup(ABC):
     """
     A diffeomorphism group.
     """
@@ -36,8 +37,9 @@ class BaseDiffeoGroup:
         return self.element(self.get_raw_identity(), self.get_raw_identity())
 
 
-    def compose_(self, d1, d2):
-        raise NotImplementedError()
+    @abstractmethod
+    def compose_(self, d1: torch.Tensor, d2: torch.Tensor):
+        pass
 
     def exponential_(self, velocity: torch.Tensor) -> torch.Tensor:
         """
