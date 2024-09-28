@@ -1,8 +1,12 @@
+from abc import ABC, abstractmethod
+from typing import Callable
 from .deformation import Deformation
 import torch
 from torch.nn.parameter import Parameter
+from .base import BaseDiffeoGroup
 
-class Representation(torch.nn.Module):
+
+class Representation(torch.nn.Module, ABC):
     """
     Group representation.
     """
@@ -22,5 +26,6 @@ class Representation(torch.nn.Module):
     def forward(self, I):
         return self.representation(self.representation(I, self.perturbation.base.deformation), self.perturbation)
 
-    def get_representation(self):
-        raise NotImplementedError()
+    @abstractmethod
+    def get_representation(self, group: BaseDiffeoGroup) -> Callable:
+        pass
