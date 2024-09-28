@@ -18,7 +18,7 @@ class Deformation:
         self.velocity = self.group.zero()
 
     @property
-    def velocity(self):
+    def velocity(self) -> torch.Tensor:
         return self._velocity
 
     @velocity.setter
