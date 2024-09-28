@@ -1,7 +1,9 @@
+from abc import ABC, abstractmethod
 import torch
 
 class DiffeoOptimizer(torch.optim.Optimizer):
     def step(self, closure=None):
+class DiffeoOptimizer(torch.optim.Optimizer, ABC):
             loss = None
             if closure is not None:
                 loss = closure()
@@ -12,8 +14,9 @@ class DiffeoOptimizer(torch.optim.Optimizer):
                     velocity = cometric(momentum)
                     self._update_parameter(p, velocity, group)
 
+    @abstractmethod
     def _update_parameter(self, parameter, velocity, group):
-        raise NotImplementedError()
+        pass
 
 
 class GroupOptimizer(DiffeoOptimizer):
