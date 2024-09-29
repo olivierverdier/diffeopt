@@ -5,7 +5,6 @@ import torch
 from torch.nn.parameter import Parameter
 from .base import BaseDiffeoGroup
 
-from dataclasses import dataclass, field
 
 class Perturbation(Parameter):
     """
@@ -13,7 +12,7 @@ class Perturbation(Parameter):
     which contains a tensor to be modified in place during
     optimisation.
     """
-    deformation: Deformation=field(init=False)
+    deformation: Deformation
 
     @property
     def base(self):
