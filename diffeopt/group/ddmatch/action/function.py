@@ -2,6 +2,8 @@ import torch
 import numpy as np
 
 from ddmatch.core import generate_optimized_image_gradient, generate_optimized_image_composition
+from ...base import Diffeo
+
 
 from ..group import DiffeoGroup
 
@@ -30,13 +32,13 @@ def get_composition_action(shape, compute_id=False):
         """
         @staticmethod
         def forward(ctx, q, g):
-            if torch.is_tensor(g):
+            if isinstance(g, Diffeo):
+                torch_data = g.forward
+                to_save = g.backward
+            else:
                 # g must be the identity tensor
                 torch_data = g
                 to_save = g
-            else:
-                torch_data = g.forward
-                to_save = g.backward
             ctx.save_for_backward(q, to_save)
             if torch.is_tensor(g) and not compute_id:
                 # if g is a tensor, it must be the identity
