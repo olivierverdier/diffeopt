@@ -5,6 +5,8 @@ from ddmatch.core import (
     generate_optimized_image_composition,
     )
 
+from ...base import ForwardDiffeo
+
 # TODO: implement forward or backward in numba??
 
 def get_density_action(shape, compute_id=False):
@@ -19,14 +21,14 @@ def get_density_action(shape, compute_id=False):
         @staticmethod
         def forward(ctx, x, g):
             ctx.save_for_backward(x)
-            if torch.is_tensor(g):
+            if isinstance(g, ForwardDiffeo):
+                torch_data = g.forward
+            else:
                 # g must be the identity tensor
                 if not compute_id:
                     return x
                 else:
                     torch_data = g
-            else:
-                torch_data = g.forward
             g_ = torch_data.detach().numpy()
             gx_x, gx_y, gy_x, gy_y = [np.zeros(shape) for i in range(4)]
             compute_grad(g_[0], gx_x, gx_y)

@@ -2,7 +2,7 @@ import torch
 import numpy as np
 
 from ddmatch.core import generate_optimized_image_gradient, generate_optimized_image_composition
-from ...base import Diffeo
+from ...base import Diffeo, ForwardDiffeo
 
 
 from ..group import DiffeoGroup
@@ -67,7 +67,7 @@ def get_composition_action(shape, compute_id=False):
                 return (grad_output, result)
             else:
                 # Derivative wrt q
-                g = group.element(data_inv, None)
+                g = group.half_element(data_inv)
                 img_grad = density_action(grad_output, g)
                 return (img_grad, None)
     return CompositionAction.apply

@@ -29,6 +29,9 @@ class BaseDiffeoGroup(ABC):
         tensor = torch.stack([idx, idy]).requires_grad_(requires_grad)
         return tensor
 
+    def half_element(self, forward: torch.Tensor) -> "ForwardDiffeo":
+        return ForwardDiffeo(self, forward)
+
     def element(self, forward: torch.Tensor, backward: torch.Tensor) -> "Diffeo":
         # forward, backward =  [self.get_raw_identity() for i in range(2)]
         return Diffeo(self, forward, backward)
@@ -56,12 +59,15 @@ class BaseDiffeoGroup(ABC):
         return self.element(forward, backward)
 
 @dataclass
-class Diffeo:
+class ForwardDiffeo:
+    group: BaseDiffeoGroup
+    forward: torch.Tensor
+
+@dataclass
+class Diffeo(ForwardDiffeo):
     """
     A diffeomorphism and its inverse.
     """
-    group: BaseDiffeoGroup
-    forward: torch.Tensor
     backward: torch.Tensor
 
     def compose(self, other: Self) -> "Diffeo":
