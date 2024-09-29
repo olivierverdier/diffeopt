@@ -1,6 +1,7 @@
+from typing import Callable, Any
 import torch
 import numpy as np
-from ddmatch.core import (
+from ddmatch.core import (  # type: ignore
     generate_optimized_image_gradient,
     generate_optimized_image_composition,
     )
@@ -9,7 +10,7 @@ from ...base import ForwardDiffeo
 
 # TODO: implement forward or backward in numba??
 
-def get_density_action(shape, compute_id=False):
+def get_density_action(shape: torch.Size, compute_id: bool=False) -> Callable[[torch.Tensor, torch.Tensor | ForwardDiffeo], torch.Tensor]:
     image = np.zeros(shape)
     compute_grad = generate_optimized_image_gradient(image)
     compute_pullback = generate_optimized_image_composition(image)
@@ -19,7 +20,7 @@ def get_density_action(shape, compute_id=False):
         """
 
         @staticmethod
-        def forward(ctx, x, g):
+        def forward(ctx: Any, x: torch.Tensor, g: torch.Tensor | ForwardDiffeo) -> torch.Tensor:
             ctx.save_for_backward(x)
             if isinstance(g, ForwardDiffeo):
                 torch_data = g.forward
@@ -46,7 +47,7 @@ def get_density_action(shape, compute_id=False):
             return res
 
         @staticmethod
-        def backward(ctx, grad_output):
+        def backward(ctx: Any, grad_output: torch.Tensor) -> tuple[None, torch.Tensor]:  # type: ignore[override]
             f_, = ctx.saved_tensors
             f = f_.detach().numpy()
             p = grad_output.detach().numpy()
@@ -59,7 +60,7 @@ def get_density_action(shape, compute_id=False):
 
 
         @staticmethod
-        def backward_(ctx, grad_output):
+        def backward_(ctx: Any, grad_output: torch.Tensor) -> tuple[None, torch.Tensor]:
             """
             For the record, here is a theoretically equivalent,
             and simpler version of the momentum map.

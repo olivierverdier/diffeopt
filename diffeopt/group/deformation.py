@@ -11,7 +11,7 @@ class Deformation:
     _velocity: torch.Tensor = field(init=False)
     deformation: Diffeo = field(init=False)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self.reset()
 
     def reset(self) -> None:
@@ -22,6 +22,6 @@ class Deformation:
         return self._velocity
 
     @velocity.setter
-    def velocity(self, velocity: torch.Tensor):
+    def velocity(self, velocity: torch.Tensor) -> None:
         self._velocity = velocity
         self.deformation = self.group.exponential(velocity)

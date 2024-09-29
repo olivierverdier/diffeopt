@@ -15,7 +15,7 @@ class BaseDiffeoGroup(ABC):
     A diffeomorphism group.
     """
 
-    shape: tuple
+    shape: torch.Size
 
     def zero(self) -> torch.Tensor:
         new_shape = [2,] + list(self.shape)
@@ -41,7 +41,7 @@ class BaseDiffeoGroup(ABC):
 
 
     @abstractmethod
-    def compose_(self, d1: torch.Tensor, d2: torch.Tensor):
+    def compose_(self, d1: torch.Tensor, d2: torch.Tensor) -> torch.Tensor:
         pass
 
     def exponential_(self, velocity: torch.Tensor) -> torch.Tensor:

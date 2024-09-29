@@ -16,7 +16,7 @@ class DiffeoOptimizer(torch.optim.Optimizer, ABC):
                     self._update_parameter(p, velocity, group)
 
     @abstractmethod
-    def _update_parameter(self, parameter: Perturbation, velocity: torch.Tensor, group: dict[str, Any]):
+    def _update_parameter(self, parameter: Perturbation, velocity: torch.Tensor, group: dict[str, Any]) -> None:
         pass
 
 
@@ -28,7 +28,7 @@ class GroupOptimizer(DiffeoOptimizer):
         defaults = {'lr': lr, 'cometric': cometric}
         super(GroupOptimizer, self).__init__(params, defaults)
 
-    def _update_parameter(self, parameter: Perturbation, velocity: torch.Tensor, group: dict[str, Any]):
+    def _update_parameter(self, parameter: Perturbation, velocity: torch.Tensor, group: dict[str, Any]) -> None:
         grad_direction = -group['lr']*velocity
         parameter.base.deformation = parameter.base.deformation.compose(parameter.base.group.exponential(grad_direction))
 
@@ -41,6 +41,6 @@ class VelocityOptimizer(DiffeoOptimizer):
         defaults = {'lr': lr, 'cometric': cometric, 'weight_decay':weight_decay}
         super(VelocityOptimizer, self).__init__(params, defaults)
 
-    def _update_parameter(self, parameter: Perturbation, velocity: torch.Tensor, group: dict[str, Any]):
+    def _update_parameter(self, parameter: Perturbation, velocity: torch.Tensor, group: dict[str, Any]) -> None:
         direction = -group['lr']*(velocity + group['weight_decay']*parameter.base.velocity)
         parameter.base.velocity += direction

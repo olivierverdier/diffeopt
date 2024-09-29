@@ -7,7 +7,7 @@ def get_fourier_cometric(group: BaseDiffeoGroup, s: int) -> torch.Tensor:
     idx, idy = group.get_raw_identity()
     lap = 4. - 2.*(torch.cos(2.*torch.pi*idx/shape[0]) + torch.cos(2.*torch.pi*idy/shape[1]))
     lap[0,0] = 1.
-    lapinv = (1./lap)**s
+    lapinv: torch.Tensor = (1./lap)**s
     lap[0,0] = 0.
     lapinv[0,0] = 1.
     return lapinv
