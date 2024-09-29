@@ -3,17 +3,25 @@ from abc import ABC, abstractmethod
 import torch
 from .group.representation import Perturbation
 
-class DiffeoOptimizer(torch.optim.Optimizer, ABC):
-    def step(self, closure: Callable | None=None):
-            loss = None
-            if closure is not None:
+from torch.optim import Optimizer  # type: ignore[attr-defined]
+
+class DiffeoOptimizer(Optimizer, ABC):
+
+    @torch.no_grad()
+    def step(self, closure:Callable[[], float] | None = None) -> float | None:  # type: ignore[override]
+        loss: float | None = None
+        if closure is not None:
+            with torch.enable_grad():
                 loss = closure()
-            for group in self.param_groups:
-                cometric = group['cometric']
-                for p in group['params']:
-                    momentum = p.grad
-                    velocity = cometric(momentum)
-                    self._update_parameter(p, velocity, group)
+
+        for group in self.param_groups:
+            cometric = group['cometric']
+            for p in group['params']:
+                momentum = p.grad
+                velocity = cometric(momentum)
+                self._update_parameter(p, velocity, group)
+
+        return loss
 
     @abstractmethod
     def _update_parameter(self, parameter: Perturbation, velocity: torch.Tensor, group: dict[str, Any]) -> None:
