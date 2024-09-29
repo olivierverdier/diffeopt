@@ -1,4 +1,4 @@
-from typing import Any, Callable
+from typing import Any, Callable, Union, Optional
 import torch
 import numpy as np
 
@@ -8,7 +8,7 @@ from ddmatch.core import generate_optimized_image_gradient, generate_optimized_i
 
 from ..group import DiffeoGroup
 
-def get_composition_action(shape: torch.Size, compute_id:bool=False) -> Callable[[torch.Tensor, torch.Tensor | Diffeo], torch.Tensor]:
+def get_composition_action(shape: torch.Size, compute_id:bool=False) -> Callable[[torch.Tensor, Union[torch.Tensor, Diffeo]], torch.Tensor]:
     """
     compute_id: right composition with the identity
     is the identity map, but it takes time to compute.
@@ -32,7 +32,7 @@ def get_composition_action(shape: torch.Size, compute_id:bool=False) -> Callable
         and its derivative wrt g.
         """
         @staticmethod
-        def forward(ctx: Any, q: torch.Tensor, g: torch.Tensor | Diffeo) -> torch.Tensor:
+        def forward(ctx: Any, q: torch.Tensor, g: Union[torch.Tensor, Diffeo]) -> torch.Tensor:
             if isinstance(g, Diffeo):
                 torch_data = g.forward
                 to_save = g.backward
@@ -52,7 +52,7 @@ def get_composition_action(shape: torch.Size, compute_id:bool=False) -> Callable
             return res
 
         @staticmethod
-        def backward(ctx: Any, grad_output: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor | None]:  # type: ignore[override]
+        def backward(ctx: Any, grad_output: torch.Tensor) -> tuple[torch.Tensor, Optional[torch.Tensor]]:  # type: ignore[override]
             """
             This is the adjoint of the derivative only
             if g was the identity.

@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Callable
+from typing import Callable, Union
 from .deformation import Deformation
 import torch
 from torch.nn.parameter import Parameter
@@ -39,5 +39,5 @@ class Representation(torch.nn.Module, ABC):
         return self.representation(self.representation(I, self.perturbation.base.deformation), self.perturbation)
 
     @abstractmethod
-    def get_representation(self, group: BaseDiffeoGroup) -> Callable[[torch.Tensor, torch.Tensor | Diffeo], torch.Tensor]:
+    def get_representation(self, group: BaseDiffeoGroup) -> Callable[[torch.Tensor, Union[torch.Tensor, Diffeo]], torch.Tensor]:
         pass

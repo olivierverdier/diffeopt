@@ -1,4 +1,4 @@
-from typing import Callable, Any
+from typing import Callable, Any, Union
 import torch
 import numpy as np
 from ddmatch.core import (  # type: ignore
@@ -10,7 +10,7 @@ from ...base import ForwardDiffeo
 
 # TODO: implement forward or backward in numba??
 
-def get_density_action(shape: torch.Size, compute_id: bool=False) -> Callable[[torch.Tensor, torch.Tensor | ForwardDiffeo], torch.Tensor]:
+def get_density_action(shape: torch.Size, compute_id: bool=False) -> Callable[[torch.Tensor, Union[torch.Tensor, ForwardDiffeo]], torch.Tensor]:
     image = np.zeros(shape)
     compute_grad = generate_optimized_image_gradient(image)
     compute_pullback = generate_optimized_image_composition(image)
@@ -20,7 +20,7 @@ def get_density_action(shape: torch.Size, compute_id: bool=False) -> Callable[[t
         """
 
         @staticmethod
-        def forward(ctx: Any, x: torch.Tensor, g: torch.Tensor | ForwardDiffeo) -> torch.Tensor:
+        def forward(ctx: Any, x: torch.Tensor, g: Union[torch.Tensor, ForwardDiffeo]) -> torch.Tensor:
             ctx.save_for_backward(x)
             if isinstance(g, ForwardDiffeo):
                 torch_data = g.forward

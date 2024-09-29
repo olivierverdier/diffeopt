@@ -1,4 +1,4 @@
-from typing import Callable, Any
+from typing import Callable, Any, Optional, Union
 from abc import ABC, abstractmethod
 import torch
 from .group.representation import Perturbation
@@ -8,8 +8,8 @@ from torch.optim import Optimizer  # type: ignore[attr-defined]
 class DiffeoOptimizer(Optimizer, ABC):
 
     @torch.no_grad()
-    def step(self, closure:Callable[[], float] | None = None) -> float | None:  # type: ignore[override]
-        loss: float | None = None
+    def step(self, closure:Optional[Callable[[], float]] = None) -> Optional[float]:  # type: ignore[override]
+        loss: Optional[float] = None
         if closure is not None:
             with torch.enable_grad():
                 loss = closure()
