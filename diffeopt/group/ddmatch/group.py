@@ -13,10 +13,10 @@ def get_composition(shape):
         return torch.from_numpy(np.array([tmp0, tmp1]))
     return compose
 
+@dataclass
 class DiffeoGroup(BaseDiffeoGroup):
-    def __init__(self, shape):
-        super(DiffeoGroup, self).__init__(shape)
-        self.composition_ = get_composition(shape)
+    def __post_init__(self):
+        self.composition_ = get_composition(self.shape)
 
     def compose_(self, d1, d2):
         return self.composition_(d1, d2)
