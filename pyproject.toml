@@ -1,6 +1,6 @@
 [project]
 name = "diffeopt"
-version = "0.2.0"
+version = "0.2.1"
 authors = [{name = "Olivier Verdier", email="olivier.verdier@gmail.com"}]
 description = "Optimisation on Diffeomorphisms"
 dependencies = [
