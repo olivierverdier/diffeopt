@@ -39,7 +39,7 @@ def get_density_action(shape: torch.Size, compute_id: bool=False) -> Callable[[t
             gy_y[0,:] += shape[1]/2
             gy_y[-1,:] += shape[1]/2
 
-            jac = gx_x*gy_y - gx_y*gy_x # Jacobian
+            jac = gx_x*gy_y - gx_y*gy_x  # Jacobian
 
             pb = np.zeros(np.shape(x))
             compute_pullback(x.detach().numpy(), g_[0], g_[1], pb)

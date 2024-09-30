@@ -6,7 +6,7 @@ def test_zero_dist():
     """
     Information distance from image to itself is zero.
     """
-    I = 1 + torch.rand(8,8) # make sure it is positive
+    I = 1 + torch.rand(8,8)  # make sure it is positive
     assert information_distance(I,I) == 0
 
 def test_information_derivative():

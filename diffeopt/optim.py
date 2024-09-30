@@ -1,4 +1,4 @@
-from typing import Callable, Any, Optional, Union
+from typing import Callable, Any, Optional
 from abc import ABC, abstractmethod
 import torch
 from .group.representation import Perturbation

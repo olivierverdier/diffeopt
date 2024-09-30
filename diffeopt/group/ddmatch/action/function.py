@@ -2,7 +2,7 @@ from typing import Any, Callable, Union, Optional
 import torch
 import numpy as np
 
-from ...base import Diffeo, ForwardDiffeo
+from ...base import Diffeo
 
 from ddmatch.core import generate_optimized_image_gradient, generate_optimized_image_composition  # type: ignore
 
@@ -63,7 +63,7 @@ def get_composition_action(shape: torch.Size, compute_id:bool=False) -> Callable
                 q_ = q.detach().numpy()
                 gxout, gyout = np.zeros_like(q_), np.zeros_like(q_)
                 image_gradient(q_, gxout, gyout)
-                grad = torch.tensor([gxout, gyout])
+                grad = torch.tensor(np.array([gxout, gyout]))
                 result = grad*grad_output
                 return (grad_output, result)
             else:

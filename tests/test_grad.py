@@ -1,4 +1,3 @@
-import numpy as np
 import torch
 from diffeopt.group.ddmatch.action.function import get_composition_action
 from diffeopt.group.ddmatch.action.density import get_density_action
@@ -72,7 +71,6 @@ def test_one_jacobian():
     shape = [16]*2
     group = DiffeoGroup(shape)
     act = get_density_action(shape)
-    idall = group.identity()
     vel = group.zero()
     vel[0] += 3
     trans = group.exponential(vel)
