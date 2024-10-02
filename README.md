@@ -6,7 +6,7 @@
 
 Optimisation on diffeomorphisms using Pytorch to compute the gradient automatically.
 
-The general idea is to be able to minimise expressions of the form F(g . x), where g is a diffeomorphism, x is a *template*, and must b an element in a vector space, and where F is a *cost function*.
+The general idea is to be able to minimise expressions of the form $g ↦ F(g . x_0)$, where $g$ is a diffeomorphism, $x_0$ is a *template*, and must be an element in a vector space, and where $F$ is a *cost function*.
 
 This can be used to do direct matching or indirect matching, both with several kinds of regularisation.
 
@@ -38,7 +38,7 @@ Now we prepare an optimizer. It needs a learning rate and a cometric, as well as
 ```python
 from diffeopt.cometric.laplace import get_laplace_cometric
 from diffeopt.optim import GroupOptimizer
-go = GropuOptimizer(srep.parameters(), lr=1e-1, cometric=get_laplace_cometric(group, s=2))
+go = GroupOptimizer(srep.parameters(), lr=1e-1, cometric=get_laplace_cometric(group, s=2))
 ```
 
 We now prepare the necessary variables to compute the loss function.
