@@ -6,7 +6,11 @@
 
 Optimisation on diffeomorphisms using Pytorch to compute the gradient automatically.
 
-The general idea is to be able to minimise expressions of the form $g ↦ F(g . x_0)$, where $g$ is a diffeomorphism, $x_0$ is a *template*, and must be an element in a vector space, and where $F$ is a *cost function*.
+The general idea is to be able to minimise expressions of the form $g ↦ F(g · x_0)$, where 
+- $g$ is a group element, typically a diffeomorphism
+- $x_0$ is a *template*, typically either a density or a function (i.e., an image)
+- $F$ is a *cost function*
+- $g · x$ is an action (or representation) of the diffeomorphism group on densities or functions
 
 This can be used to do direct matching or indirect matching, both with several kinds of regularisation.
 
@@ -26,12 +30,12 @@ from diffeopt.group.ddmatch.group import DiffeoGroup
 group = DiffeoGroup(I0.shape)
 ```
 
-First, prepare the "network", with one layer, which keeps a group element as a parameter, and computes one or several action on images.
+First, prepare the “network”, with one layer, which keeps a group element as a parameter, and computes one or several action on images.
 Here, we want to compute, for the same group element, an action on function and one on densities:
 ```python
 from diffeopt.group.ddmatch.representation import DensityRepresentation, FunctionRepresentation
-from diffeopt.sum_representation import get_sum_representation
-srep = get_sum_representation(FunctionRepresentation(group), DensityRepresentation(group))
+from diffeopt.sum_representation import OrbitProblem
+srep = OrbitProblem(FunctionRepresentation(group), DensityRepresentation(group))
 ```
 
 Now we prepare an optimizer. It needs a learning rate and a cometric, as well as the network's parameters to be initialized:
