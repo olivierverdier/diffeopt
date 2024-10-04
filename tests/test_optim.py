@@ -1,7 +1,7 @@
 import torch
 from diffeopt.group.ddmatch.representation import FunctionRepresentation, DensityRepresentation
 from diffeopt.group.ddmatch.group import DiffeoGroup
-from diffeopt.sum_representation import OrbitProblem
+from diffeopt.sum_representation import RepresentationProduct
 from diffeopt.distance.information import information_distance
 from torch.nn import MSELoss
 from diffeopt.cometric.laplace import get_laplace_cometric
@@ -17,7 +17,7 @@ def test_orbit_optimisation():
     group = DiffeoGroup(I0.shape)
     cometric = get_laplace_cometric(group, s=2)
 
-    sum_rep = OrbitProblem(FunctionRepresentation(group), DensityRepresentation(group))
+    sum_rep = RepresentationProduct(FunctionRepresentation(group), DensityRepresentation(group))
     oo = GroupOptimizer(sum_rep.parameters(), lr=.1, cometric=cometric)
     vol = normalize(torch.ones_like(I1))
     vol__ = vol + 1e-2*torch.randn_like(vol)
