@@ -16,37 +16,36 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.9", "3.10", "3.11", "3.12"]
+        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
 
     steps:
     - uses: actions/checkout@v4
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
+    - name: Install uv and Python
+      uses: astral-sh/setup-uv@v5
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
+    - name: Install the project
       run: |
-        python -m pip install --upgrade pip
-        python -m pip install flake8 pytest
-        pip install .[dev]
+        uv sync --all-extras --dev
     - name: Lint with flake8
       run: |
+        uv add flake8
         # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics --exclude=src
+        uv run flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics --exclude=.venv
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics --ignore=E501,E252,E226,E741,E402,E231,E302,W504,E303,E123,W391,E306,E305
+        uv run flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics --ignore=E501,E252,E226,E741,E402,E231,E302,W504,E303,E123,W391,E306,E305 --exclude=.venv
     - name: Lint with Ruff
       run: |
-        pip install ruff
-        ruff check --output-format=github --ignore E741,E402 .
+        uv add ruff
+        uv run ruff check --output-format=github --ignore E741,E402 --exclude=.venv .
       continue-on-error: true
     - name: Test with pytest
       run: |
-        pytest tests
+        uv run pytest tests
     - name: Generate Coverage Report
       run: |
-        pip install coverage
-        coverage run -m pytest tests
+        uv add coverage
+        uv run coverage run -m pytest tests
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v4.0.1
       with:

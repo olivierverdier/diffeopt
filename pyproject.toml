@@ -1,8 +1,11 @@
 [project]
 name = "diffeopt"
 version = "0.2.1"
+requires-python = ">=3.9"
 authors = [{name = "Olivier Verdier", email="olivier.verdier@gmail.com"}]
 description = "Optimisation on Diffeomorphisms"
+readme = "README.md"
+license = {file = "LICENSE"}
 dependencies = [
     "ddmatch @ git+https://github.com/olivierverdier/ddmatch",
     "torch",
@@ -10,17 +13,9 @@ dependencies = [
     "numba", # only used in `ddmatch`
     "matplotlib", # only used in `ddmatch`
 ]
-readme = "README.md"
-license = {file = "LICENSE"}
 
-[build-system]
-requires = ["setuptools >= 61.0"]
-build-backend = "setuptools.build_meta"
 
-[tool.pytest.ini_options]
-pythonpath = [
-  "."
+[dependency-groups]
+dev = [
+    "pytest>=8.3.4",
 ]
-
-[tool.setuptools]
-packages = ["diffeopt"]
