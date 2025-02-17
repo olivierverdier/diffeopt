@@ -10,8 +10,6 @@ dependencies = [
     "ddmatch @ git+https://github.com/olivierverdier/ddmatch",
     "torch",
     "numpy",
-    "numba", # only used in `ddmatch`
-    "matplotlib", # only used in `ddmatch`
 ]
 
 
