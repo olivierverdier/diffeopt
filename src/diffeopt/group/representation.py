@@ -21,6 +21,8 @@ class Perturbation(Parameter):
 class Representation(torch.nn.Module, ABC):
     """
     Group representation.
+    The parameter is the group element stored in `perturbation`,
+    which is an instance of `Parameter`.
     """
 
     def __init__(self, group: BaseDiffeoGroup, requires_grad:bool=True):

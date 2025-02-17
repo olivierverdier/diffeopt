@@ -6,6 +6,8 @@ import torch
 class Deformation:
     """
     A container for a big or small deformation.
+    The attribute `velocity` stores an element ``ξ`` of the Lie algebra
+    `deformation` stores the diffeo ``[exp(ξ), exp(-ξ)]``.
     """
     group: BaseDiffeoGroup
     _velocity: torch.Tensor = field(init=False)
