@@ -26,17 +26,15 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install the project
       run: |
-        uv sync --all-extras --dev
+        uv sync --dev
     - name: Lint with flake8
       run: |
-        uv add flake8
         # stop the build if there are Python syntax errors or undefined names
         uv run flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics --exclude=.venv
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         uv run flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics --ignore=E501,E252,E226,E741,E402,E231,E302,W504,E303,E123,W391,E306,E305 --exclude=.venv
     - name: Lint with Ruff
       run: |
-        uv add ruff
         uv run ruff check --output-format=github --ignore E741,E402 --exclude=.venv .
       continue-on-error: true
     - name: Test with pytest
@@ -44,7 +42,6 @@ jobs:
         uv run pytest tests
     - name: Generate Coverage Report
       run: |
-        uv add coverage
         uv run coverage run -m pytest tests
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v4.0.1
